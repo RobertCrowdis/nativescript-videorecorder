@@ -33,20 +33,18 @@ export class VideoRecorder {
 
                 let intent = new android.content.Intent(android.provider.MediaStore.ACTION_VIDEO_CAPTURE);
                 intent.putExtra(android.provider.MediaStore.EXTRA_VIDEO_QUALITY, options.hd);
+                let fileName = `videoCapture_${+new Date()}.mp4`;
 
                 if (options.size > 0) {
                     intent.putExtra(android.provider.MediaStore.EXTRA_SIZE_LIMIT, options.size * 1024 * 1024);
                 }
                 if (!options.saveToGallery) {
-                    let fileName = `videoCapture_${+new Date()}.mp4`;
+
                     let path = android.os.Environment.getExternalStoragePublicDirectory(android.os.Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera/" + fileName;
                     file = new java.io.File(path);
                     intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, file.toURI());
 
                 } else {
-                    let fileName = `videoCapture_${+new Date()}.mp4`;
-
-
                     let sdkVersionInt = parseInt(platform.device.sdkVersion);
                     if (sdkVersionInt > 21) {
 
@@ -60,7 +58,6 @@ export class VideoRecorder {
                         file = new java.io.File(path);
                         intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, android.net.Uri.fromFile(file))
                     }
-
                 }
                 if (options.duration > 0) {
                     intent.putExtra(android.provider.MediaStore.EXTRA_DURATION_LIMIT, options.duration);
